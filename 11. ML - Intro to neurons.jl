@@ -5,7 +5,7 @@
 # Now, let's narrow our focus and look at **neural networks**. Neural networks (or "neural nets", for short) are a specific choice of a **model**. It's a network made up of **neurons**; this, in turn, leads to the question, "what is a neuron?"
 
 
-#-
+#%%
 
 # ### Models with multiple inputs
 #
@@ -28,7 +28,7 @@
 # This version of the sigmoid model that takes multiple inputs is an example of a **neuron**.
 
 
-#-
+#%%
 
 # In the video, we see that one huge class of learning techniques is based around neurons, that is, *artificial neurons*. These are caricatures of real, biological neurons. Both *artificial* and *biological* neurons have several inputs $x_1, \ldots, x_n$, and a single output, $y$. Schematically they look like this:
 
@@ -45,7 +45,7 @@ draw_network([number_inputs, number_neurons])
 # - the neuron (shown in red on the right) receives all the inputs, processes them, and outputs a single number to the right.
 
 
-#-
+#%%
 
 # In other words, a neuron is just a type of function that takes multiple inputs and returns a single output.
 #
@@ -79,7 +79,7 @@ draw_network([2, 1])
 # where the dot product $\mathbf{w} \cdot \mathbf{x}$ is an abbreviated syntax for $w_1 x_1 + w_2 x_2$.
 
 
-#-
+#%%
 
 # #### Exercise 1
 #

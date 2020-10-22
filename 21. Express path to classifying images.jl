@@ -1,12 +1,12 @@
 # # Express path to classifying images
 
 
-#-
+#%%
 
 # In this notebook, we will show how to run classification software similar to how Google images works.
 
 
-#-
+#%%
 
 # Julia allows us to load in various pre-trained models for classifying images, via the `Metalhead.jl` package.
 
@@ -15,7 +15,7 @@
 using Metalhead  # To run type <shift> + enter
 using Metalhead: classify
 
-#-
+#%%
 
 using Images
 
@@ -24,7 +24,7 @@ using Images
 
 download("http://www.mikebirkhead.com/images/EyeForAnElephant.jpg", "elephant.jpg")
 
-#-
+#%%
 
 image = load("elephant.jpg") # open up a new cell type ESC + b (for below)
 
@@ -45,7 +45,7 @@ end
 
 image
 
-#-
+#%%
 
 classify(vgg, image)
 
@@ -60,14 +60,14 @@ classify(vgg, image)
 
 image = load("data/philip.jpg")
 
-#-
+#%%
 
 classify(vgg, image)
 
 # ## What is going on here?
 
 
-#-
+#%%
 
 # VGG19 classifies images according to the following 1000 different classes:
 
@@ -77,7 +77,7 @@ Metalhead.ImageNet.imagenet_labels[rand(1:1000)]
 # The model is a Convolutional Neural Network (CNN), made up of a sequence of layers of "neurons" with interconnections. The huge number of parameters making up these interconnections have previously been learnt to correctly predict a set of training images representing each class.
 
 
-#-
+#%%
 
 # Running the model on an image spits out the probability that the model assigns to each class:
 
@@ -90,14 +90,14 @@ probs = Metalhead.forward(vgg, image)
 perm = sortperm(probs)
 probs[273]
 
-#-
+#%%
 
 [ Metalhead.ImageNet.imagenet_labels[perm] probs[perm] ][end:-1:end-10, :]
 
 # ## What are the questions to get a successful classifier via machine learning?
 
 
-#-
+#%%
 
 # The key questions to obtain a successful classifier in machine learning are:
 #
@@ -106,7 +106,7 @@ probs[273]
 # - How do we train it on suitably labelled data?
 
 
-#-
+#%%
 
 # These are the questions that this course is designed to address.
 

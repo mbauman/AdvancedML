@@ -1,7 +1,7 @@
 # # Tools - Using arrays to store data
 
 
-#-
+#%%
 
 # ### Introduction to arrays
 #
@@ -12,7 +12,7 @@
 # *Why do we want an object like this to store our data?*
 
 
-#-
+#%%
 
 # An alternative to using an array in some contexts would be to name every individual piece of data, as follows:
 #
@@ -60,14 +60,14 @@
 # It's worth noting that in Julia, 1-dimensional arrays are also called "vectors".
 
 
-#-
+#%%
 
 # ### Creating arrays
 #
 # In the last section, we saw that we could create the array `numbers` by typing our elements, `a`, `b`, and `c` (or `1.1`, `2.2`, and `3.3`), inside square brackets.
 
 
-#-
+#%%
 
 # #### Exercise 1 
 #
@@ -78,25 +78,25 @@
 # Reminder: ESC+b to open a box below.
 
 
-#-
+#%%
 
 # #### Solution
 
 
 first_array = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
 
-#-
+#%%
 
 [√i for i=1:10] # \sqrt + <tab> gives √
 
-#-
+#%%
 
 π
 
 # ### Array comprehensions
 
 
-#-
+#%%
 
 # Alternatively we can create arrays via *"array comprehensions"*. This is a nice way to automate creating an array, if you don't want to have to type long lists of numbers inside square brackets.
 #
@@ -121,7 +121,7 @@ first_array = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
 # Create an array, `squares`, that stores the squares of all integers between 1 and 100.
 
 
-#-
+#%%
 
 # #### Solution
 
@@ -141,7 +141,7 @@ squares = [x^2 for x in 1:100]
 # to grab the third element in the array called `counting`.
 
 
-#-
+#%%
 
 # #### Exercise 2
 #
@@ -163,7 +163,7 @@ myprimes[89]
 # ### Slicing
 
 
-#-
+#%%
 
 # Instead of grabbing a single number in an array, we can also take a **slice** of an array, i.e. a subset of the array, which can include multiple values. To take a slice of `counting` that includes the 3rd, 4th, and 5th entries, we use the following syntax with a colon (`:`):
 #
@@ -172,14 +172,14 @@ myprimes[89]
 # ```
 
 
-#-
+#%%
 
 # #### Exercise 3
 #
 # Index into `myprimes` to grab the 89th through the 99th smallest primes (inclusive).
 
 
-#-
+#%%
 
 # #### Solution
 
@@ -197,7 +197,7 @@ myprimes[89:99]
 # 3) Remove an item from the end of an array.
 
 
-#-
+#%%
 
 # #### Update an item at an existing position in an array
 #
@@ -222,14 +222,14 @@ myprimes[89:99]
 # Note that a single `=` assigns a new variable to the value on the left of the `=` sign.
 
 
-#-
+#%%
 
 # #### Exercise 4
 #
 # Use an array comprehension to create an array, `mysequence`, that stores the numbers 4 through 10. Index into `mysequence` and update it to replace the last element, `10`, with `11`.
 
 
-#-
+#%%
 
 # #### Solution
 #
@@ -284,7 +284,7 @@ mysequence[length(mysequence)] = 11
 # Use `push!` to add `21` to `fibonacci` after the number `13`.
 
 
-#-
+#%%
 
 # #### Solution
 
@@ -307,14 +307,14 @@ push!(fibonacci, 21)
 # will remove `1000` from the end of `counting`.
 
 
-#-
+#%%
 
 # #### Exercise 6
 #
 # Use `pop!` to remove `21` from `fibonacci`. What does this function call return?
 
 
-#-
+#%%
 
 # **Solution**
 #
@@ -351,7 +351,7 @@ pop!(fibonacci)
 # *Now* what is the last element of `fibonacci`?
 
 
-#-
+#%%
 
 # ### Arrays of arrays and multidimensional arrays
 #
@@ -362,7 +362,7 @@ pop!(fibonacci)
 
 favorites = [ ["koobideh", "chocolate", "eggs"], ["penguins", "cats", "sugargliders"] ]
 
-#-
+#%%
 
 numbers = [ [1, 2, 3], [4, 5], [6, 7, 8, 9] ]
 
@@ -373,7 +373,7 @@ numbers = [ [1, 2, 3], [4, 5], [6, 7, 8, 9] ]
 
 rand(4, 3)
 
-#-
+#%%
 
 rand(4, 3, 2)
 
@@ -393,7 +393,7 @@ rand(4, 3, 2)
 #  since 6 is in the 2nd row and 3rd column of `A`.
 
 
-#-
+#%%
 
 # #### Exercise 8
 #
@@ -406,7 +406,7 @@ rand(4, 3, 2)
 #  Grab the prime in the 8th row and 5th column via indexing. What is the value of this prime?
 
 
-#-
+#%%
 
 # #### Solution
 #
@@ -437,11 +437,11 @@ myprimematrix[8, 5]
 
 fibonacci
 
-#-
+#%%
 
 somenumbers = fibonacci
 
-#-
+#%%
 
 somenumbers
 
@@ -460,7 +460,7 @@ fibonacci
 # What is the first element in `fibonacci`?
 
 
-#-
+#%%
 
 # #### Solution
 #
@@ -479,19 +479,19 @@ fibonacci[1]
 # to see that the first element of `fibonacci` is `404`.
 
 
-#-
+#%%
 
 # ### Copying or not?
 
 
-#-
+#%%
 
 # Did copying `fibonacci` like this work?
 #
 # No, unfortunately not. When we tried to copy, all we did was give `fibonacci` a new name, `somenumbers`. Now when we update `somenumbers`, we're also updating `fibonacci` because they are the same object!
 
 
-#-
+#%%
 
 # If we actually want to make a *copy* of the array bound to `fibonacci`, we can use the `copy` function:
 
@@ -501,29 +501,29 @@ fibonacci[1]
 fibonacci[1] = 1
 fibonacci
 
-#-
+#%%
 
 somemorenumbers = copy(fibonacci)
 
-#-
+#%%
 
 somemorenumbers[1] = 404
 
-#-
+#%%
 
 fibonacci
 
 # In this last example, fibonacci was not updated. Therefore we see that the arrays bound to `somemorenumbers` and `fibonacci` are distinct.
 
 
-#-
+#%%
 
 # #### Exercise 10
 #
 # Copy `myprimematrix` to `mynewprimematrix`. Update `mynewprimematrix[3,3]` to `1234`.
 
 
-#-
+#%%
 
 # #### Solution
 
@@ -534,7 +534,7 @@ mynewprimematrix[3, 3] = 1234
 # **Tests**
 
 
-#-
+#%%
 
 # ```
 # mynewprimematrix[3, 3] == 1234

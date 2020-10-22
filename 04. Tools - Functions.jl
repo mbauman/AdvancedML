@@ -8,23 +8,23 @@
 # For example, we might have a function `g` that takes a number as an input and returns the square of that number as an output. How can we define this function `g` on a computer? Julia gives us a few different ways to do this.
 
 
-#-
+#%%
 
 # ### Defining functions
 
 
-#-
+#%%
 
 # Firstly, we could write `g` as follows:
 
 
 g(x) = x^2
 
-#-
+#%%
 
 g(2), g(3.5)
 
-#-
+#%%
 
 g(3.0)
 
@@ -35,7 +35,7 @@ function g1(x)
     return x^2
 end
 
-#-
+#%%
 
 g1(2), g1(3.5)
 
@@ -51,7 +51,7 @@ g1(2), g1(3.5)
 
 map(sqrt, [1, 2, 3]) # equivalent to [sqrt(1), sqrt(2), sqrt(3)]
 
-#-
+#%%
 
 map(x->x^2, [1, 2, 3])
 
@@ -64,7 +64,7 @@ g2(3.5), g2("I ♡ Julia ") # Use \heartsuit + TAB to get the ♡ character
 # ## An important sigmoidal function
 
 
-#-
+#%%
 
 # A particular function that is used a lot in machine learning is a so-called "sigmoidal" function (meaning a function that is S-shaped, i.e. the graph of the function looks like an `S`).
 #
@@ -80,12 +80,12 @@ g2(3.5), g2("I ♡ Julia ") # Use \heartsuit + TAB to get the ♡ character
 # Use the first syntax given above to define the function `σ` in Julia. Note that Julia actually allows us to use the symbol σ as a variable name! To do so, type `\sigma<TAB>` in the code cell.
 
 
-#-
+#%%
 
 # ## Plotting functions
 
 
-#-
+#%%
 
 # Let's draw the function σ to see what it looks like. Throughout this course, we'll use the Julia package `Plots.jl` for all of the graphics. This package provides a flexible syntax for plotting, in which options to change attributes like the width of the lines used in the figure are given as named keyword arguments.
 #
@@ -96,7 +96,7 @@ g2(3.5), g2("I ♡ Julia ") # Use \heartsuit + TAB to get the ♡ character
 using Plots
 gr()   # use the GR "backend" (plotting library)
 
-#-
+#%%
 
 plot(σ, -5, 5)
 
@@ -106,14 +106,11 @@ vline!([0], ls=:dash, lw=3)     # add a vertical line at 0
 # We can think of $\sigma$ as a smooth version of a step or threshold function (often called a "Heaviside" function). To see this, let's modify the steepness of the jump in $\sigma$ and compare it to the Heaviside function; we'll see how all this works in more detail later:
 
 
-## using Pkg; Pkg.add("Interact")
-using Interact
-
-#-
+#%%
 
 heaviside(x) = x < 0 ? 0.0 : 1.0
 
-#-
+#%%
 
 @manipulate for w in 0.1:0.1:20
     plot(x -> σ(w*x), -5, 5, label="sigma", lw=2)
@@ -123,21 +120,21 @@ end
 # This particular function takes any real number as input, and gives an output between $0$ and $1$. It is continuous and smooth.
 
 
-#-
+#%%
 
 # #### Exercise 2
 #
 # Declare the sigmoid function above as an anonymous function with a different name.
 
 
-#-
+#%%
 
 # ### Mutating functions: `...!`
 #
 # To generate our plot of σ above, we used some functions that end with `!`. What does a `!` at the end of a function name mean in Julia?
 
 
-#-
+#%%
 
 # Functions that change or modify their inputs are called **mutating functions**. But wait, don't all functions do that?
 #
@@ -185,7 +182,7 @@ v1
 # Then change the code slightly to remove the `!` after `plot!(r, h)`. How does this change your output? What do you think it means to add `!` after plotting commands?
 
 
-#-
+#%%
 
 # ## Pointwise application of functions, `f.(x, y)` and `x .+ y` (known as "broadcasting")
 #
@@ -220,7 +217,7 @@ f.(x)
 # You should see an error message after calling `g(r)`, which says that Julia cannot multiply two vectors. When we call `g(r)`, we ask Julia to multiply `r` by `r`. When we call `g.(r)`, we ask Julia to multiply *each element* in `r` by itself.
 
 
-#-
+#%%
 
 # #### Exercise 3
 #
@@ -234,21 +231,21 @@ f.(x)
 # What is the type of `numbers`?
 
 
-#-
+#%%
 
 # #### Exercise 4
 #
 # Broadcast `typeof` over `numbers` to see what the types of the elements stored inside `numbers` are.
 
 
-#-
+#%%
 
 # #### Exercise 5
 #
 # Write a `for` loop that applies `g` to each of the elements of `r` and prints the results. Verify that the numbers printed by this `for` loop are equal to the entries of the output of `g.(r)`.
 
 
-#-
+#%%
 
 # #### Exercise 6
 #
@@ -256,6 +253,6 @@ f.(x)
 # Apply the $\sigma$ function pointwise to this range and define `ys` as the result.
 # What does the result look like? Plot these as points and join them with lines.
 #
-# Make the plot interactive where you can vary the step size. Fix the range of the plot in the `x` and `y` directions using the functions `xlims!` and `ylims!`.
+# Make the plot so you can vary the step size. Fix the range of the plot in the `x` and `y` directions using the functions `xlims!` and `ylims!`.
 
 

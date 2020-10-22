@@ -20,7 +20,7 @@
 # However, we can imagine that a model can have too many parameters, where we begin to fit  not only the high level features of the data, but also the noise. This overfitting is depicted in the third image.
 
 
-#-
+#%%
 
 # Our aim will be to fit the data well, but avoiding *over*fitting the data!
 

@@ -1,19 +1,19 @@
 # # Minimizing functions - how a computer learns
 
 
-#-
+#%%
 
 # In the previous notebooks, we've seen that by changing **parameters** in a function, we could find a "best fit" of that function to some data. We use a **loss function** to quantify the "goodness" of a set of parameters and we look for those parameters that **optimize**, in fact **minimize**, the loss function. If we teach a machine how to minimize the loss function on its own, we say that machine is able to **learn** how to model our data.
 #
 # In the last notebook, we threw around terms like **derivative**, **gradient**, and **gradient descent** to give you a rough sense of how we minimize a function on a computer. In this notebook, we will step through these concepts more carefully, with the aim of being able to implement them using Julia.
 
 
-#-
+#%%
 
 # ## Minimizing a 1D function using calculus
 
 
-#-
+#%%
 
 # Let's draw the 1D loss function $L_1$ from a previous notebook again:
 
@@ -26,43 +26,43 @@ y1 = 0.8
 
 L1(w) = (y1 - f(x1, w))^2
 
-#-
+#%%
 
 ## using Pkg; Pkg.add(["Plots", "Interact"])
 using Plots; gr()
 using Interact
 
-#-
+#%%
 
 plot(L1, -2, 1.5, xlabel="w", ylabel="L1(w)", leg=false)
 
 # By eye, we can see that the minimum is around $w=0.6$. But how can we get the computer to work this out on its own?
 
 
-#-
+#%%
 
 # In the previous notebook, we thought of this function plot as a hill, viewed from the side. We could find the minimum by making the hill sticky, and letting a ball roll down it. The ball will find and settle in the minimum of the function.  Now let's see how to teach a computer to do this.
 #
 # We need to find the downhill direction along the hill, which is related to its *slope* (how steep it is). Calculus provides us with tools to calculate that slope!
 
 
-#-
+#%%
 
 # Namely, the slope of a curve $L_1(w)$ at $w$ is given by its **derivative** $L_1'(w)$; geometrically, this is the slope of the **tangent line** to the curve at that point, i.e. the straight line which touches the curve at that point.
 
 
-#-
+#%%
 
 # Calculus provides us with some rules to calculate an analytical formula for the derivative, and we will see later how to apply these rules, albeit indirectly, for machine learning. 
 # To gain understanding, however, we will see here how to get the computer to help us out by calculating the derivatives numerically instead!
 
 
-#-
+#%%
 
 # ## Approximating derivatives
 
 
-#-
+#%%
 
 # Let's recall that the derivative $L_1'(w)$ of a function is defined as
 #
@@ -71,7 +71,7 @@ plot(L1, -2, 1.5, xlabel="w", ylabel="L1(w)", leg=false)
 # for a small step size $h$. (Strictly speaking, we must take the limit when $h$ tends to $0$ to obtain the exact value of the derivative.)
 
 
-#-
+#%%
 
 # #### Exercise 1
 #
@@ -87,7 +87,7 @@ plot(L1, -2, 1.5, xlabel="w", ylabel="L1(w)", leg=false)
 # The function `f` will square the input we give it and multiply by `a`. However,  if we choose to call `f(x)` *without* passing it an `a` input, it will assume `a` is `3` and return `3*x^2`.
 
 
-#-
+#%%
 
 # #### Solution
 #
@@ -121,7 +121,7 @@ end
 # $$y = y_0 + m*(x - x_0).$$
 
 
-#-
+#%%
 
 # #### Solution
 
@@ -155,29 +155,29 @@ end
 # What is the value of the derivative (slope of the tangent line) at a minimum? Can this happen anywhere else?
 
 
-#-
+#%%
 
 # #### Solution
 
 
-#-
+#%%
 
 # The derivative is `0` at a minimum. This happens at any minimum, maximum or "point of inflection" of a smooth function.
 
 
-#-
+#%%
 
 # ## Minimization by gradient descent
 
 
-#-
+#%%
 
 # The tangent line at a point is a good approximation of the function near that point. Therefore the derivative tells us in which direction, and how fast, a function grows or shrinks when we move a small distance away from that point. 
 #
 # As we saw in the previous notebook, we can think of the function as being a hill, and having a ball that we want to move down the hill. Gravity will automatically pull the ball in the direction *down* the hill; we want to emulate this in the computer!
 
 
-#-
+#%%
 
 # #### Exercise 4
 #
@@ -186,26 +186,26 @@ end
 # If the derivative $L_1'(w)$ is positive (> 0), in which direction should we move $w$ to *decrease* $L_1$?
 
 
-#-
+#%%
 
 # #### Solution
 #
 # We should move $w$ left, i.e. decrease it.
 
 
-#-
+#%%
 
 # #### Exercise 5
 #
 # If the derivative $L_1'(w)$ is negative (< 0), in which direction should we move $w$ to *decrease* $L_1$?
 
 
-#-
+#%%
 
 # We can use this information to tell the computer which way to take a step. This constitutes the numerical algorithm called **gradient descent**; it is called this since we are descending (moving downwards) along the graph of the function by using information about its gradient (slope).
 
 
-#-
+#%%
 
 # #### Exercise 6
 #
@@ -224,7 +224,7 @@ end
 # Using `L1` and `-2:0.01:1.5` as your inputs to `gradient_descent`, for what value of $w$ is $L_1$ at a minimum?
 
 
-#-
+#%%
 
 # #### Solution
 
@@ -265,7 +265,7 @@ gradient_descent(L1, -2:0.01:1.5)
 # Using `L1`, `-2:0.01:1.5`, and `.000001` as your inputs to `gradient_descent`, for what value of $w$ is $L_1$ at a minimum?
 
 
-#-
+#%%
 
 # #### Solution
 #
@@ -297,19 +297,19 @@ gradient_descent(L1, -2:0.01:1.5, .000001)
 # After you've completed this step, you will have found a good approximation to the value $w^*$ where $L_1$ reaches its minimum, and the minimum value $L_1(w^*)$, which in this case is (almost) $0$.
 
 
-#-
+#%%
 
 # #### Exercise 8
 #
 # Alter the function `gradient_descent` so that it stores the results `(w, L1(w))` at each step of the algorithm as an array and returns this array. How many steps does the algorithm take for input parameters `(L1, -2:0.01:1.5, .000001)` before terminating? You should count your starting $w_0$ as your first step.
 
 
-#-
+#%%
 
 # #### Solution
 
 
-#-
+#%%
 
 # Your altered code should look like this, getting the number of steps with `length`:
 
@@ -348,7 +348,7 @@ length(gradient_descent(L1, -2:0.01:1.5, .000001))
 # *Hint*: It may be easier to see what's going on if you only plot, for example, every 15th step.
 
 
-#-
+#%%
 
 # #### Solution
 #
@@ -365,14 +365,14 @@ fig1
 # ## Functions of 2 variables and their derivatives
 
 
-#-
+#%%
 
 # So far, we have been looking at the minimizing a loss function $L_1(w)$ that depends on a single parameter, $w$. Now let's turn to the cost function $L_2(w, b)$ from a previous notebook, that is a function of *two* parameters, $w$ and $b$, and try to minimize it.
 #
 # As we've seen, we get a **surface**, instead of a curve, when we graph $L_2$ as a function of both of its parameters.
 
 
-#-
+#%%
 
 # **Exercise 10** 
 #
@@ -393,7 +393,7 @@ ys = [0.8, 0.3, 0.4, 0.4]
 # #### Solution
 
 
-#-
+#%%
 
 # The following code will generate the desired graphic:
 
@@ -412,12 +412,12 @@ surface(-2:0.02:2, -2:0.02:2, L2, alpha=0.6, xlabel = "w", ylabel = "b", zlabel 
 # ### Finding the minimum
 
 
-#-
+#%%
 
 # We can just about see, by rotating the graph, that $L_2$ has a single minimum. We want to find the values of $w$ and $b$ where this minimum value is reached.
 
 
-#-
+#%%
 
 # Following what we did for the function $L_1$ above, we expect that we will need to calculate derivatives of $L_2$. Since the function is more complicated, though, the derivatives are too!
 #
@@ -433,7 +433,7 @@ surface(-2:0.02:2, -2:0.02:2, L2, alpha=0.6, xlabel = "w", ylabel = "b", zlabel 
 # [Note that $\frac{\partial L_2}{\partial w}$ is itself a function of $w$ and $b$; we could write $\frac{\partial L_2}{\partial w}(w, b)$.]
 
 
-#-
+#%%
 
 # #### Exercise 11
 #
@@ -442,7 +442,7 @@ surface(-2:0.02:2, -2:0.02:2, L2, alpha=0.6, xlabel = "w", ylabel = "b", zlabel 
 # In particular, declare functions called `partial_w` and `partial_b`. Each should take four inputs - a function $f$ of two variables, the first input argument to $f$, the second input argument to $f$, and a step size `h` with default value `0.001`. `partial_w` should return the partial derivative of $f$ with respect to its first input argument and `partial_b` should return the partial derivative of $f$ with respect to its second input argument.
 
 
-#-
+#%%
 
 # #### Solution
 #
@@ -472,7 +472,7 @@ partial_b(f, w, b, h = 0.001) = ( f(w, b + h) - f(w, b) ) / h
 # Use `partial_b` from the last exercise to find the partial derivative of $L_2$ with respect to $w$ at b = 0.3, $\frac{\partial L_2}{\partial w}|_{b = 0.3}$ for `w = -2:0.01:1`
 
 
-#-
+#%%
 
 # #### Solution
 
@@ -492,12 +492,12 @@ partialw = partial_w.(L2, wrange, 0.3 )
 # For what value of $w$ in this range is the slope of the cross section closest to -1?
 
 
-#-
+#%%
 
 # #### Solution
 
 
-#-
+#%%
 
 # The slope is closest to -1.0 at w = -0.55. You can see this by running the following code:
 
@@ -518,12 +518,12 @@ end
 # ## ***Optional**: Functions with $n$ inputs
 
 
-#-
+#%%
 
 # If a function $f$ takes $n$ input arguments, we can write them as $p_1, \ldots, p_n$, where $p_i$ means the "$i$th parameter". In Julia, we can wrap them up into a single **vector**. Now we can calculate the partial derivative $\frac{\partial L_2}{\partial p_i}$ with respect to the $i$th variable.
 
 
-#-
+#%%
 
 # #### Exercise 14
 #
@@ -560,7 +560,7 @@ end
 # ```
 
 
-#-
+#%%
 
 # #### Solution
 
@@ -586,7 +586,7 @@ dreams(inputs...)
 # Hint: you will need to `copy` and modify `p` within `partial`.
 
 
-#-
+#%%
 
 # #### Solution
 
@@ -611,7 +611,7 @@ end
 # ## Gradient descent in 2 dimensions
 
 
-#-
+#%%
 
 # It turns out that the gradient vector of the function $L_2(w, b)$ gives the direction in the plane $(w, b)$ in which the function $L_2$ **increases fastest**. 
 #
@@ -622,7 +622,7 @@ end
 # Let's now generalize the gradient descent algorithm that we wrote previously to work our 2-dimensional function.
 
 
-#-
+#%%
 
 # #### Exercise 16
 #
@@ -649,7 +649,7 @@ end
 # Hint: Do not count your starting coordinates `[-2.0, -2.0]` as a step.
 
 
-#-
+#%%
 
 # #### Solution
 #
@@ -695,7 +695,7 @@ steps, values = gradient_descent(L2, -2:0.02:2, -2:0.02:2, .001 )
 # C) Near the minimum of $C_2$
 
 
-#-
+#%%
 
 # #### Solution
 #
@@ -713,7 +713,7 @@ fig
 # ## What we have learnt
 
 
-#-
+#%%
 
 # To recap, in this notebook, we have seen that the computer can calculate approximate derivatives, and that we can use those inside a relatively simple algorithm, gradient descent, to minimize functions of 1 and 2 variables!
 #

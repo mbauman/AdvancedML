@@ -15,7 +15,7 @@
 # The idea of using vectors is that different directions in the space of outputs encode information about different types of inputs.
 
 
-#-
+#%%
 
 # Now we extend our previous model to give multiple outputs by repeating it with different weights. For the first element of the array we'd use:
 #
@@ -30,7 +30,7 @@
 # $$\sigma(x;w^{(i)},b^{(i)}) := \frac{1}{1 + \exp(-w^{(i)} \cdot x + b^{(i)})}.$$
 
 
-#-
+#%%
 
 # Notice that these equations are all the same, except for the parameters, so we can write this model more succinctly, as follows. Let's write $b$ in an array:
 #
@@ -74,7 +74,7 @@
 # Matrix multiplication is also interesting since **GPUs (Graphics Processing Units, i.e. graphics cards) are basically just matrix multiplication machines**, which means that by writing the equation this way, the result can be calculated really fast.
 
 
-#-
+#%%
 
 # This "multiple input and multiple output" version of the sigmoid function is known as a *layer of neurons*.
 #

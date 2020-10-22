@@ -3,19 +3,19 @@
 # In this notebook, we'll move beyond binary classification. We'll try to distinguish between three fruits now, instead of two. We'll do this using **multiple** neurons arranged in a **single layer**.
 
 
-#-
+#%%
 
 # ## Read in and process data
 
 
-#-
+#%%
 
 # We can start by loading the necessary packages and getting our data into working order with similar code we used at the beginning of the previous notebooks, except that now we will combine three different apple data sets, and will add in some grapes to the fruit salad!
 
 
 using CSV, DataFrames, Flux, Plots
 
-#-
+#%%
 
 ## Load apple data in CSV.read for each file
 apples1 = DataFrame(CSV.File("data/Apple_Golden_1.dat", delim='\t', normalizenames=true))
@@ -29,11 +29,11 @@ apples = vcat(apples1, apples2, apples3)
 
 size(apples)
 
-#-
+#%%
 
 apples[1:1, :]
 
-#-
+#%%
 
 x_apples  = [ [apples[i, :red], apples[i, :blue]] for i in 1:size(apples, 1) ]
 
@@ -52,14 +52,14 @@ grapes = vcat(grapes1, grapes2)
 x_bananas  = [ [bananas[i, :red], bananas[i, :blue]] for i in 1:size(bananas, 1) ]
 x_grapes = [ [grapes[i, :red], grapes[i, :blue]] for i in 1:size(grapes, 1) ]
 
-#-
+#%%
 
 xs = vcat(x_apples, x_bananas, x_grapes)
 
 # ## One-hot vectors
 
 
-#-
+#%%
 
 # Now we wish to classify *three* different types of fruit. It is not clear how to encode these three types using a single output variable; indeed, in general this is not possible.
 #
@@ -78,7 +78,7 @@ xs = vcat(x_apples, x_bananas, x_grapes)
 # Effectively, the first neuron will learn whether or not (1 or 0) the data corresponds to an apple, the second whether or not (1 or 0) it corresponds to a banana, etc.
 
 
-#-
+#%%
 
 # `Flux.jl` provides an efficient representation for one-hot vectors, using advanced features of Julia so that it does not actually store these vectors, which would be a waste of memory; instead `Flux` just records in which position the non-zero element is. To us, however, it looks like all the information is being stored:
 
@@ -93,33 +93,33 @@ onehot(1, 1:3)
 # Make an array `labels` that gives the labels (1, 2 or 3) of each data point. Then use `onehot` to encode the information about the labels as a vector of `OneHotVector`s.
 
 
-#-
+#%%
 
 # **Solution**:
 
 
 labels = [ones(length(x_apples)); 2*ones(length(x_bananas)); 3*ones(length(x_grapes))]
 
-#-
+#%%
 
 ys = [onehot(label, 1:3) for label in labels]  # onehotbatch(labels, 1:3)
 
 # The input data is in `xs` and the one-hot vectors are in `ys`.
 
 
-#-
+#%%
 
 # ## Single layer in Flux
 
 
-#-
+#%%
 
 # Let's suppose that there are two pieces of input data, as in the previous single neuron notebook. Then the network has 2 inputs and 3 outputs:
 
 
 
 
-#-
+#%%
 
 include("draw_neural_net.jl")
 draw_network([2, 3])
@@ -129,7 +129,7 @@ draw_network([2, 3])
 
 using Flux
 
-#-
+#%%
 
 model = Dense(2, 3, σ)
 
@@ -138,7 +138,7 @@ model = Dense(2, 3, σ)
 # Now what do the weights inside `model` look like? How does this compare to the diagram of the network layer above?
 
 
-#-
+#%%
 
 # #### Solution
 
@@ -166,24 +166,24 @@ model(x)
 # [Recall that we also use `.` to access the fields `W` and `b` in the `model` object; this is a different use of `.`.]
 
 
-#-
+#%%
 
 # ## Training the model
 
 
-#-
+#%%
 
 # Despite the fact that the model is now more complicated than the single neuron from the previous notebook, the beauty of `Flux.jl` is that the rest of the training process **looks exactly the same**!
 
 
-#-
+#%%
 
 # #### Exercise 3
 #
 # Implement training for this model.
 
 
-#-
+#%%
 
 # **Solution**:
 
@@ -193,17 +193,17 @@ loss(x, y) = Flux.mse(model(x), y)
 data = zip(xs, ys);
 opt = Descent()
 
-#-
+#%%
 
 sum(loss.(xs, ys))
 
-#-
+#%%
 
 for i in 1:100
     Flux.train!(loss, params(model), data, opt)
 end
 
-#-
+#%%
 
 sum(loss.(xs, ys))
 
@@ -228,12 +228,12 @@ scatter!(first.(x_grapes), last.(x_grapes), color=:green, label="grapes")
 # Interpret the results by checking which fruit each neuron was supposed to learn and what it managed to achieve.
 
 
-#-
+#%%
 
 # #### Solution
 
 
-#-
+#%%
 
 # We see that two of the hyperplanes have been learnt correctly, the one that separates bananas from the rest, and the one that separates grapes from the rest. However, the hyperplane for the neuron that was supposed to learn to distinguish apples is not at all correct.
 #

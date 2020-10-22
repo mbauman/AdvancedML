@@ -1,14 +1,14 @@
 # # Intro to Flux.jl
 
 
-#-
+#%%
 
 # We have learned how machine learning allows us to classify data as apples or bananas with a single neuron. However, some of those details are pretty fiddly! Fortunately, Julia has a powerful package that does much of the heavy lifting for us, called [`Flux.jl`](https://fluxml.github.io/).
 #
 # *Using `Flux` will make classifying data and images much easier!*
 
 
-#-
+#%%
 
 # ## Using `Flux.jl`
 #
@@ -41,11 +41,11 @@ model = Dense(2, 1, σ)
 
 model.W
 
-#-
+#%%
 
 model.b
 
-#-
+#%%
 
 typeof(model.W)
 
@@ -57,7 +57,7 @@ model([1,2])
 # Can you reproduce its output?
 
 
-#-
+#%%
 
 # Perhaps the most powerful functionality is the ability to automatically compute the gradient of an arbitrary Julia function.
 
@@ -74,7 +74,7 @@ gradient(f, 5, 6)
 #
 
 
-#-
+#%%
 
 # Other helpful built-in functionality include other common (even if simple) utilities
 # used in machine learning tasks, like other activation and cost functions. This

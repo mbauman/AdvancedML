@@ -5,7 +5,7 @@
 # But how exactly do computers represent data? Let's find out exactly what an "artificial intelligence" has at its disposal to learn from.
 
 
-#-
+#%%
 
 # ## Data is represented as arrays
 #
@@ -17,7 +17,7 @@ using Images
 
 apple = load("data/10_100.jpg")
 
-#-
+#%%
 
 banana = load("data/104_100.jpg")
 
@@ -28,31 +28,31 @@ banana = load("data/104_100.jpg")
 # An array is a bunch of numbers in connected boxes; the figure above shows a 1-dimensional array. Our images are instead 2-dimensional arrays, or matrices, of numbers, arranged something like this:
 
 
-#-
+#%%
 
 # <img src="data/array2d.png" alt="attachment:array2d.png" width="500"/>
 
 
-#-
+#%%
 
 # For example, `apple` is an image, consisting of a 100x100 array of numbers:
 
 
 typeof(apple)
 
-#-
+#%%
 
 size(apple)
 
-#-
+#%%
 
 a = [ 1 2 3;4 5 6]
 
-#-
+#%%
 
 typeof(a)
 
-#-
+#%%
 
 size(a)
 
@@ -61,11 +61,11 @@ size(a)
 
 apple
 
-#-
+#%%
 
 dump(apple[40, 60])
 
-#-
+#%%
 
 apple[18:20,29:31]
 
@@ -74,7 +74,7 @@ apple[18:20,29:31]
 # So, in fact, an image is a 2D array, in which each element of the array is an object (a collection of numbers) describing a coloured pixel.
 
 
-#-
+#%%
 
 # ## Colors as numbers
 #
@@ -85,33 +85,33 @@ apple[18:20,29:31]
 
 Float64(red(apple[40, 60]))
 
-#-
+#%%
 
 using Statistics
 
-#-
+#%%
 
 [ mean(float.(c.(img))) for c = [red,green,blue], img = [apple,banana] ]
 
-#-
+#%%
 
 using Plots
 histogram(float.(green.(apple[:])),color="red",label="apple", normalize=true, nbins=25)
 histogram!(float.(green.(banana[:])),color="yellow",label="banana",normalize=true, nbins=25)
 
-#-
+#%%
 
 apple
 
-#-
+#%%
 
 float(red(banana[50,20]))
 
-#-
+#%%
 
 banana[50,20]
 
-#-
+#%%
 
 pixel = apple[40, 60]
 
@@ -132,14 +132,14 @@ blue_value  = Float64( blue(pixel) )
 
 print("The RGB values are ($red_value, $green_value, $blue_value)")
 
-#-
+#%%
 
 apple
 
 # We see that every color is bright, which corresponds to white.
 
 
-#-
+#%%
 
 # ## Working on an image as a whole
 #
@@ -149,22 +149,22 @@ apple
 redpartofapple = Float64.(red.(apple))
 mean(redpartofapple)
 
-#-
+#%%
 
 using Plots
 
-#-
+#%%
 
 gr()
 
-#-
+#%%
 
 histogram(redpartofapple[:],color=:red,label="redness in the apple")
 
 # Note that we get a 2D array (matrix) back.
 
 
-#-
+#%%
 
 # Julia's [mathematical standard library](https://docs.julialang.org/en/stable/stdlib/math/#Mathematics-1) has many mathematical functions built in. One of them is the `mean` function, which computes the average value. If we apply this to our apple:
 
@@ -176,7 +176,7 @@ mean(Float64.(red.(apple)))
 # *Somehow we need to teach a computer to use this information about a picture to recognize that there's an apple there!*
 
 
-#-
+#%%
 
 # ## A quick riddle
 #
@@ -188,7 +188,7 @@ mean(Float64.(red.(banana)))
 # Oh no, that's more red than our apple? This isn't a mistake and is actually true! Before you move onto the next exercise, examine the images of the apple and the banana very carefully and see if you can explain why this is expected.
 
 
-#-
+#%%
 
 # #### Exercise 1
 #
@@ -197,7 +197,7 @@ mean(Float64.(red.(banana)))
 # (To open a new box use <ESC>+b (b is for "below", what do you think a does?))
 
 
-#-
+#%%
 
 # #### Exercise 2
 #

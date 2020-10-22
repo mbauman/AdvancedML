@@ -1,7 +1,7 @@
 # Follow the video on https://www.youtube.com/watch?v=vAp6nUMrKYg.
 
 
-#-
+#%%
 
 # # Autodiff:  Calculus  from another angle 
 # (and the special role played by Julia's multiple dispatch and compiler technology)
@@ -18,7 +18,7 @@
 # <img src="https://upload.wikimedia.org/wikipedia/commons/1/18/Derivative.svg" width="400">
 
 
-#-
+#%%
 
 # ## Babylonian sqrt
 #
@@ -42,11 +42,11 @@ end
 α = π
 Babylonian(α), √α
 
-#-
+#%%
 
 x=2; Babylonian(x),√x  # Type \sqrt+<tab> to get the symbol
 
-#-
+#%%
 
 ## using Pkg
 # Pkg.add("Plots")
@@ -56,7 +56,7 @@ using Plots
 gr()
 #pyplot()
 
-#-
+#%%
 
 ## Warning first plots load packages, takes time
 i = 0:.01:49
@@ -69,7 +69,7 @@ plot!(sqrt,i,c="black",label="sqrt",
 # ## ...and now the derivative, almost by magic
 
 
-#-
+#%%
 
 # Eight lines of Julia!  No mention of 1/2 over sqrt(x).
 # D for "dual number", invented by the famous algebraist Clifford in 1873.
@@ -95,7 +95,7 @@ promote_rule(::Type{D}, ::Type{<:Number}) = D
 
 x=49; Babylonian(D((x,1))), (√x,.5/√x)
 
-#-
+#%%
 
 x=π; Babylonian(D((x,1))), (√x,.5/√x)
 
@@ -105,7 +105,7 @@ x=π; Babylonian(D((x,1))), (√x,.5/√x)
 # import any autodiff package.  Everything is just basic vanilla Julia.
 
 
-#-
+#%%
 
 # ## The assembler
 #
@@ -133,7 +133,7 @@ end
 ## using Pkg; Pkg.add("SymPy")
 using SymPy
 
-#-
+#%%
 
 x = symbols("x")
 display("Iterations as a function of x")
@@ -149,7 +149,7 @@ end
 # The code is computing answers mathematically equivalent to the functions above, but not symbolically, numerically.
 
 
-#-
+#%%
 
 # ## How autodiff is getting the answer
 # Let us by hand take the "derivative" of the Babylonian iteration with respect to x. Specifically t′=dt/dx.  This is the old fashioned way of a human rewriting code.
@@ -179,12 +179,12 @@ Babylonian(D((x,1)))
 # How did this work?  It created the same derivative iteration that we did by hand, using very general rules that are set once and need not be written by hand.
 
 
-#-
+#%%
 
 # Important:: The derivative is substituted before the JIT compiler, and thus efficient compiled code is executed.
 
 
-#-
+#%%
 
 # ## Dual Number Notation
 #
@@ -203,43 +203,43 @@ Babylonian(D((x,1)))
 
 Base.show(io::IO,x::D) = print(io,x.f[1]," + ",x.f[2]," ϵ")
 
-#-
+#%%
 
 ## Add the last two rules
 import Base: -,*
 -(x::D, y::D) = D(x.f .- y.f)
 *(x::D, y::D) = D((x.f[1]*y.f[1], (x.f[2]*y.f[1] + x.f[1]*y.f[2])))
 
-#-
+#%%
 
 D((1,0))
 
-#-
+#%%
 
 D((0,1))^2
 
-#-
+#%%
 
 D((2,1)) ^2
 
-#-
+#%%
 
 ϵ = D((0,1))
 @code_native(ϵ^2)
 
-#-
+#%%
 
 ϵ * ϵ
 
-#-
+#%%
 
 ϵ^2
 
-#-
+#%%
 
 1/(1+ϵ)  # Exact power series:  1-ϵ+ϵ²-ϵ³-...
 
-#-
+#%%
 
 (1+ϵ)^5 ## Note this just works (we didn't train powers)!!
 
@@ -251,19 +251,19 @@ function nthroot(x, n=2; t=1, N = 10)
     t
 end
 
-#-
+#%%
 
 nthroot(2,3), ∛2 # take a cube root
 
-#-
+#%%
 
 nthroot(2+ϵ,3)
 
-#-
+#%%
 
 nthroot(7,12), 7^(1/12)
 
-#-
+#%%
 
 x = 2.0
 nthroot( x+ϵ,3), ∛x, 1/x^(2/3)/3
@@ -275,23 +275,23 @@ nthroot( x+ϵ,3), ∛x, 1/x^(2/3)/3
 ## using Pkg
 # Pkg.add("ForwardDiff")
 
-#-
+#%%
 
 using ForwardDiff
 
-#-
+#%%
 
 ForwardDiff.derivative(sqrt, 2)
 
-#-
+#%%
 
 ForwardDiff.derivative(Babylonian, 2)
 
-#-
+#%%
 
 @which ForwardDiff.derivative(sqrt, 2)
 
-#-
+#%%
 
 
 
@@ -302,18 +302,18 @@ ForwardDiff.derivative(Babylonian, 2)
 setprecision(3000)
 round.(Float64.(log10.([Babylonian(BigFloat(2),N=k) for k=1:10] .- √BigFloat(2))); sigdigits = 3)
 
-#-
+#%%
 
 struct D1{T} <: Number  # D is a function-derivative pair
     f::Tuple{T,T}
 end
 
-#-
+#%%
 
 z = D((2.0,1.0))
 z1 = D1((BigFloat(2.0),BigFloat(1.0)))
 
-#-
+#%%
 
 import Base: +, /, convert, promote_rule
 +(x::D1, y::D1) = D1(x.f .+ y.f)
@@ -321,23 +321,23 @@ import Base: +, /, convert, promote_rule
 convert(::Type{D1{T}}, x::Real) where {T} = D1((convert(T, x), zero(T)))
 promote_rule(::Type{D1{T}}, ::Type{S}) where {T,S<:Number} = D1{promote_type(T,S)}
 
-#-
+#%%
 
 A = randn(3,3)
 
-#-
+#%%
 
 x = randn(3)
 
-#-
+#%%
 
 ForwardDiff.gradient(x->x'A*x,x)
 
-#-
+#%%
 
 (A+A')*x
 
-#-
+#%%
 
 #Pkg.add("LinearAlgebra")
 using LinearAlgebra
@@ -347,7 +347,7 @@ Strang = SymTridiagonal(2*ones(n),-ones(n-1))
 # ##  But wait there's more!
 
 
-#-
+#%%
 
 # Many packages need to be taught how to compute autodiffs of matrix factorications such as the svd or lu.  Julia will "just do it," no
 # teaching necessary for reasons such as the above.  This is illustrated in another notebook, not included here.

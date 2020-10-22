@@ -3,7 +3,7 @@
 # In this notebook, we'll use `Flux` to create a single neuron and teach it to learn, as we did by hand in notebook 10!
 
 
-#-
+#%%
 
 # ### Read in data and process it
 #
@@ -29,12 +29,12 @@ ys = vcat(fill(0, size(x_apples)), fill(1, size(x_bananas)))
 # The input data is in `xs` and the labels (true classifications as bananas or apples) in `ys`.
 
 
-#-
+#%%
 
 # ### Using `Flux.jl`
 
 
-#-
+#%%
 
 # Now we can load `Flux` to really get going!
 
@@ -45,14 +45,14 @@ using Flux
 # ### Making a single neuron in Flux
 
 
-#-
+#%%
 
 # Let's use `Flux` to build our neuron with 2 inputs and 1 output:
 #
 #  <img src="data/single-neuron.png" alt="Drawing" style="width: 500px;"/>
 
 
-#-
+#%%
 
 # #### Exercise 1
 #
@@ -61,7 +61,7 @@ using Flux
 # our neural network, transformed by a sigmoid to have outputs between 0 and 1.
 
 
-#-
+#%%
 
 # #### Exercise 2
 #
@@ -70,12 +70,12 @@ using Flux
 # `loss` should take two inputs: a vector storing data, `x`, and a vector storing the correct "labels" for that data. `loss` should return the sum of the squares of differences between the predictions and the correct labels.
 
 
-#-
+#%%
 
 # ## Calculating gradients using Flux
 
 
-#-
+#%%
 
 # For learning, we know that what we need is a way to calculate derivatives of the `loss` function with respect to the parameters `W` and `b`. So far, we have been doing that using finite differences.
 #
@@ -93,29 +93,29 @@ gradient(x->model(x)[1], xs[1])
 # datapoint in our dataset (`xs[1]`). Note that `Flux` provides a function `params` to ask models for their tuneable parameters.
 
 
-#-
+#%%
 
 # ### Stochastic gradient descent
 
 
-#-
+#%%
 
 # We can now use these features to reimplement stochastic gradient descent, following the method we used in the previous notebook, but now using backpropagation!
 
 
-#-
+#%%
 
 # #### Exercise 4
 #
 # Modify the code from the previous notebook for stochastic gradient descent to use Flux instead.
 
 
-#-
+#%%
 
 # ### Investigating stochastic gradient descent
 
 
-#-
+#%%
 
 # Let's look at the values stored in `b` before we run stochastic gradient descent:
 
@@ -132,7 +132,7 @@ W_final, b_final = stochastic_gradient_descent(loss, W, b, xs, ys, 1000)
 
 W_final
 
-#-
+#%%
 
 b_final
 
@@ -141,14 +141,14 @@ b_final
 # Plot the data and the learned function.
 
 
-#-
+#%%
 
 # #### Exercise 6
 #
 # Do this plot every so often as the learning process is proceeding in order to have an animation of the process.
 
 
-#-
+#%%
 
 # #### Exercise 7
 #
@@ -158,14 +158,14 @@ b_final
 
 ?Descent
 
-#-
+#%%
 
 ?Flux.train!
 
 # ## Adding more features
 
 
-#-
+#%%
 
 # #### Exercise 13
 #

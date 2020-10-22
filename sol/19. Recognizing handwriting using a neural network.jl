@@ -1,19 +1,19 @@
 # # Learning to recognize handwritten digits using a neural network
 
 
-#-
+#%%
 
 # We have now reached the point where we can tackle a very interesting task: applying the knowledge we have gained with machine learning in general, and `Flux.jl` in particular, to create a neural network that can recognize handwritten digits! The data are from a data set called MNIST, which has become a classic in the machine learning world.
 #
 # [We could also try to apply the techniques to the original images of fruit instead. However, the fruit images are much larger than the MNIST images, which makes the learning a suitable neural network too slow.]
 
 
-#-
+#%%
 
 # ## Data munging
 
 
-#-
+#%%
 
 # As we know, the first difficulty with any new data set is locating it, understanding what format it is stored in, reading it in and decoding it into a useful data structure in Julia.
 #
@@ -24,12 +24,12 @@
 # The data are images of handwritten digits, and the corresponding labels that were determined by hand (i.e. by humans). Our job will be to get the computer to **learn** to recognize digits by learning, as usual, the function that relates the input and output data.
 
 
-#-
+#%%
 
 # ### Loading and examining the data
 
 
-#-
+#%%
 
 # First we load the required packages:
 
@@ -48,7 +48,7 @@ images = MNIST.images();
 # Examine the `labels` data. Then examine the first few images. *Do not try to view the whole of the `images` object!* Try to drill down to discover how the data is laid out.
 
 
-#-
+#%%
 
 # #### Solution
 
@@ -87,7 +87,7 @@ show(images[1])
 
 using Images
 
-#-
+#%%
 
 images[1]
 
@@ -96,15 +96,15 @@ images[1]
 
 images[1:6]
 
-#-
+#%%
 
 show(labels[1:6])
 
-#-
+#%%
 
 reshape(images[1:100], 10, 10)
 
-#-
+#%%
 
 (images[1])[20, 20]
 
@@ -113,7 +113,7 @@ reshape(images[1:100], 10, 10)
 # Convert the first image to a matrix of `Float64`.
 
 
-#-
+#%%
 
 # #### Solution
 
@@ -123,7 +123,7 @@ float_image = Float64.(images[1])
 # ### Munging the data
 
 
-#-
+#%%
 
 # In the previous notebooks, we arranged the input data for Flux as a `Vector` of `Vector`s.
 # Now we will use an alternative arrangement, as a matrix, since that allows `Flux` to use matrix operations, which are more efficient.
@@ -131,7 +131,7 @@ float_image = Float64.(images[1])
 # The column $i$ of the matrix is a vector consisting of the $i$th data point $\mathbf{x}^{(i)}$.  Similarly, the desired outputs are given as a matrix, with the $i$th column being the desired output $\mathbf{y}^{(i)}$.
 
 
-#-
+#%%
 
 # #### Exercise 3
 #
@@ -144,7 +144,7 @@ float_image = Float64.(images[1])
 # 3. Define a variable $n$ that is the length of these vectors.
 
 
-#-
+#%%
 
 # #### Solution
 
@@ -154,7 +154,7 @@ n = length(vec(images[1]))
 # Let's use a subset of $N=5,000$ of the total $60,000$ training images that are available, in order to speed up the training process.
 
 
-#-
+#%%
 
 # #### Exercise 4
 # Make a function `rewrite` that accepts a range and converts that range of images to floating-point vectors and stacks them horizontally using `hcat` and the "splat" operator `...`.
@@ -164,14 +164,14 @@ n = length(vec(images[1]))
 # Return the pair `(X, Y)`.
 
 
-#-
+#%%
 
 # #### Solution
 
 
 using Flux: onehotbatch
 
-#-
+#%%
 
 function rewrite(r)  # rewrite a range r of images
 
@@ -181,19 +181,19 @@ function rewrite(r)  # rewrite a range r of images
     return (X, Y)
 end
 
-#-
+#%%
 
 N = 5_000
 X, Y = rewrite(1:N)
 
-#-
+#%%
 
 size(X)
 
 # ## Setting up the neural network
 
 
-#-
+#%%
 
 # Now we must set up a neural network. Since the data is complicated, we may expect to need several layers.
 # But we can start with a single layer.
@@ -205,12 +205,12 @@ size(X)
 # It is then our task as neural network designers to insert layers between these input and output layers, whose weights will be tuned during the learning process. *This is an art, not a science*! But major advances have come from finding a good structure for the network.
 
 
-#-
+#%%
 
 # ### Softmax
 
 
-#-
+#%%
 
 # We will make a network with a single layer; let's choose each neuron in the layer to use the `relu` activation function.
 # The output `relu` can be arbitrarily large, but in the end we will wish to compare the network's output with one-hot vectors, i.e. values between $0$ and $1$.
@@ -220,26 +220,26 @@ size(X)
 # The most used function with this property is $\mathrm{softmax}$. Firstly we take the exponential of each input variable to make them positive. Then we divide by the sum to make sure they lie between $0$ and $1$.
 
 
-#-
+#%%
 
 # <!-- $$\mathrm{softmax}(\mathbf{x})_i := \frac{\exp (x_i)}{\sum_j \exp(x_j)}$$ -->
 
 
-#-
+#%%
 
 # Note that here we have written the result for the $i$th component of the function $\mathbf{R}^n \to \mathbf{R}^n$. Note also that the function returns a vector of numbers that are positive, and whose components sum to $1$. Thus, in fact, they can be thought of as probabilities.
 #
 # In the neural network context, using a `softmax` after the final layer thus allows us to interpret the outputs as probabilities, in our case the probability that the network assigns that a given image represents each possible output value ($0$-$9$)!
 
 
-#-
+#%%
 
 # #### Exercise 5
 #
 # Make a neural network with one single layer, using the function $\sigma$, and a final `softmax`.
 
 
-#-
+#%%
 
 # #### Solution
 
@@ -265,7 +265,7 @@ opt = ADAM()
 # ## Training
 
 
-#-
+#%%
 
 # As we know, **training** consists of iteratively adjusting the model's parameters to decrease the `loss` function. Which parameters need to be adjusted? All of them!
 #
@@ -279,7 +279,7 @@ l = loss(X, Y)
 # For this reason, `data` must consist of an iterable object that returns pairs `(X, Y)` at each step.
 
 
-#-
+#%%
 
 # The simplest possibility is
 
@@ -304,23 +304,23 @@ X, Y = rewrite(1:N)
 
 loss(X, Y)
 
-#-
+#%%
 
 @time Flux.train!(loss, params(model), data, opt)
 
-#-
+#%%
 
 @time Flux.train!(loss, params(model), dataset, opt)
 
 # This is (approximately) equivalent to just doing a `for` loop to run the previous `train!` command 100 times.
 
 
-#-
+#%%
 
 # ### Using callbacks
 
 
-#-
+#%%
 
 # The `train!` function can take an optional keyword argument, `cb` (short for "CallBack"). A callback function is a function that you provide as an argument to a function `f`, which "calls back" your function every so often.
 #
@@ -332,7 +332,7 @@ callback() = @show(loss(X, Y))
 
 Flux.train!(loss, params(model), data, opt; cb = callback)
 
-#-
+#%%
 
 Flux.train!(loss, params(model), dataset, opt; cb = callback)
 
@@ -341,7 +341,7 @@ Flux.train!(loss, params(model), dataset, opt; cb = callback)
 
 Flux.train!(loss, params(model), dataset, opt; cb = Flux.throttle(callback, 1))
 
-#-
+#%%
 
 for i in 1:100
     Flux.train!(loss, params(model), dataset, opt; cb = Flux.throttle(callback, 1))
@@ -350,14 +350,14 @@ end
 # ## Testing phase
 
 
-#-
+#%%
 
 # We now have trained a model, i.e. we have found the parameters `W` and `b` for the network layer(s). In order to **test** if the learning procedure was really successful, we check how well the resulting trained network performs when we test it with images that the network has not yet seen!
 #
 # Often, a dataset is split up into "training data" and "test (or validation) data" for this purpose, and indeed the MNIST data set has a separate pool of training data. We can instead use the images that we have not included in our reduced training process.
 
 
-#-
+#%%
 
 # #### Exercise 7
 #
@@ -366,24 +366,24 @@ end
 
 X_test, Y_test = rewrite(N+1:N+100)
 
-#-
+#%%
 
 loss(X_test, Y_test)
 
-#-
+#%%
 
 display(images[N+1])
 labels[N+1]
 
-#-
+#%%
 
 [model(X_test[:,1]) Y_test[:,1]]
 
-#-
+#%%
 
 loss(X_test[:,1], Y_test[:,1])
 
-#-
+#%%
 
 loss(X_test, Y_test)
 
@@ -392,7 +392,7 @@ loss(X_test, Y_test)
 # Use the `indmax` function to write a function `prediction` that reports which digit `model` predicts, as the index with the maximum weight.
 
 
-#-
+#%%
 
 # #### Solution
 
@@ -404,26 +404,26 @@ prediction(i) = findmax(model(Float64.(vec(images[i]))))[2] # returns (max_value
 # Count the number of correct predictions over the whole data set, and hence the percentage of images that are correctly predicted. [This percentage is what is used to compare different machine learning techniques.]
 
 
-#-
+#%%
 
 # #### Solution
 
 
 which_correct = [prediction(i) == (labels[i]) + 1 for i in 1:length(images)];
 
-#-
+#%%
 
 percentage = 100 * count(which_correct) / length(images)
 
 # ## Improving the prediction
 
 
-#-
+#%%
 
 # So far we have used a single layer. In order to improve the prediction, we probably need to use more layers.
 
 
-#-
+#%%
 
 # #### Exercise 10
 #

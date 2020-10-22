@@ -1,7 +1,7 @@
 # # Multiple neural network layers with `Flux.jl`
 
 
-#-
+#%%
 
 # In a previous notebook, we saw that one layer of neurons wasn't enough to distinguish between three types of fruit (apples, bananas *and* grapes), since the data is quite complex. To solve this problem, we need to use more layers, so heading into the territory of **deep learning**!
 #
@@ -16,7 +16,7 @@ draw_network([2, 4, 3])
 # Much of the *art* of deep learning is choosing a suitable structure for the neural network that will allow the model to be sufficiently complex to model the data well, but sufficiently simple to allow the parameters to be learned in a reasonable length of time.
 
 
-#-
+#%%
 
 # ## Read in and process data
 #
@@ -27,7 +27,7 @@ draw_network([2, 4, 3])
 using Flux
 using Flux: onehot
 
-#-
+#%%
 
 ## using Pkg; Pkg.add("CSV")
 using CSV, DataFrames
@@ -42,7 +42,7 @@ grapes_2 = DataFrame(CSV.File("data/Grape_White_2.dat", delim='\t', normalizenam
 apples = vcat(apples_1, apples_2, apples_3)
 grapes = vcat(grapes_1, grapes_2);
 
-#-
+#%%
 
 col1 = :red
 col2 = :blue
@@ -68,12 +68,12 @@ ys = [onehot(label, 1:3) for label in labels];  # onehotbatch(labels, 1:3)
 # The input data is in `xs` and the one-hot vectors are in `ys`.
 
 
-#-
+#%%
 
 # ## Multiple layers in Flux
 
 
-#-
+#%%
 
 # Let's tell Flux what structure we want the network to have. We first specify the number of neurons in each layer, and then construct each layer as a `Dense` layer:
 
@@ -95,7 +95,7 @@ model = Chain(layer1, layer2)
 # What is the internal structure and sub-structure of this `model` object?
 
 
-#-
+#%%
 
 # #### Solution
 
@@ -107,7 +107,7 @@ model.layers
 
 model.layers[1].W
 
-#-
+#%%
 
 model.layers[1].b
 
@@ -121,7 +121,7 @@ params(model)
 # ## Training the model
 
 
-#-
+#%%
 
 # We have now set up a model and we have some training data.
 # How do we train the model on the data?
@@ -129,14 +129,14 @@ params(model)
 # The amazing thing is that the rest of the code in `Flux` is **exactly the same as before**. This is possible thanks to the design of Julia itself, and of the `Flux` package.
 
 
-#-
+#%%
 
 # #### Exercise 2
 #
 # Train the model as before, now using the popular `ADAM` optimizer. You may need to train the network for longer than before, since we have many more parameters.
 
 
-#-
+#%%
 
 # #### Solution
 
@@ -145,11 +145,11 @@ loss(x, y) = Flux.mse(model(x), y)
 data = zip(xs, ys);
 opt = ADAM(0.02)
 
-#-
+#%%
 
 sum(loss.(xs, ys))
 
-#-
+#%%
 
 @time for i in 1:100
     Flux.train!(loss, params(model), data, opt)
@@ -173,15 +173,15 @@ sum(loss.(xs, ys))
 
 W = rand(3, 2) # shape for 2 inputs, three outputs
 
-#-
+#%%
 
 W * xs[1]
 
-#-
+#%%
 
 W * xs[2]
 
-#-
+#%%
 
 W * [xs[1] xs[2]]
 
@@ -190,7 +190,7 @@ W * [xs[1] xs[2]]
 # Use the `Flux.batch` function to perform a faster training
 
 
-#-
+#%%
 
 # #### Solution
 
@@ -203,25 +203,25 @@ end
 #
 
 
-#-
+#%%
 
 # ## Visualizing the results
 
 
-#-
+#%%
 
 # What does this neural network represent? It is simply a more complicated function with two inputs and three outputs, i.e. a function $f: \mathbb{R}^2 \to \mathbb{R}^3$.
 # Before, with a single layer, each component of the function $f$ basically corresponded to a hyperplane; now it will instead be a **more complicated nonlinear function** of the input data!
 
 
-#-
+#%%
 
 # #### Exercise 3
 #
 # Visualize each component of the output separately as a heatmap and/or contours superimposed on the data. Interpret the results.
 
 
-#-
+#%%
 
 # #### Solution
 
@@ -242,19 +242,19 @@ scatter!(first.(x_grapes), last.(x_grapes), color=:green, label="grapes")
 # The third component separates grapes from the rest pretty successfully.
 
 
-#-
+#%%
 
 # ## What we have learned
 
 
-#-
+#%%
 
 # Adding an intermediate layer allows the network to start to deform the separating surfaces that it is learning into more complicated, nonlinear (curved) shapes. This allows it to separate data that were previously unable to be separated!
 #
 # However, using only two features means that data from different classes overlaps. To distinguish it we would need to use more features.
 
 
-#-
+#%%
 
 # ### Exercise 4
 #

@@ -3,7 +3,7 @@
 # Machine learning and data science is about modeling data. **Modeling** is the representation of an idea with some parameters and  a mathematical representation which we will encode in software. All machine learning methods are about training a computer to fit a model to some data. Even the fanciest neural networks are simply choices for models. In this notebook, we will begin to start building our first computational model of data.
 
 
-#-
+#%%
 
 # ## Modeling data is hard!
 #
@@ -15,7 +15,7 @@ using Images, Statistics
 
 apple = load("data/10_100.jpg")
 
-#-
+#%%
 
 banana = load("data/104_100.jpg")
 
@@ -38,18 +38,18 @@ banana_red_amount = mean(Float64.(red.(banana)));
 "The amount of red in the apple at (60, 60) is $(Float64(red(apple[60, 60]))), " *
 "while the amount of red in the banana at (60, 60) is $(Float64(red(banana[60, 60])))."
 
-#-
+#%%
 
 apple[60,60]
 
-#-
+#%%
 
 banana[60,60]
 
 # This is a clear example that modeling data is hard!
 
 
-#-
+#%%
 
 # ### A note on string interpolation
 #
@@ -62,7 +62,7 @@ banana[60,60]
 # `$apple_red_amount` is a placeholder for the value stored in the variable `apple_red_amount`. Julia knows that we want to use the value bound to the variable `apple_red_amount` and *not* the word "apple_red_amount" because of the dollar sign, `$`, that comes before `apple_red_amount`.
 
 
-#-
+#%%
 
 # #### Exercise 1
 #
@@ -74,7 +74,7 @@ banana[60,60]
 # ```
 
 
-#-
+#%%
 
 # #### Exercise 2
 #
@@ -114,7 +114,7 @@ banana_green_amount = mean(Float64.(green.(banana)));
 # **Data munging** is transforming the data into a format more suitable for modeling. Here, instead of keeping the full green channel, we transformed it down to a single data point: the average amount of green.
 
 
-#-
+#%%
 
 # ## Building a model
 #

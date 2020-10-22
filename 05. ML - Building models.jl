@@ -1,7 +1,7 @@
 # # Modeling data 2
 
 
-#-
+#%%
 
 # ## Building a model
 #
@@ -13,7 +13,7 @@
 # <img src="data/what_is_model.png" alt="Drawing" style="width: 300px;"/>
 
 
-#-
+#%%
 
 # A common function for performing this kind of **classification** is the sigmoid that we saw in the last notebook, and that we will now extend by adding two **parameters**, $w$ and $b$:
 #
@@ -27,7 +27,7 @@
 # \end{align}
 
 
-#-
+#%%
 
 # In our mathematical notation above, the `;` in the function differentiates between the **data** and the **parameters**. `x` is the data and is determined from the image. The parameters, `w` and `b`, are numbers which we choose to make our function match the results it should be modeling.
 #
@@ -46,7 +46,7 @@ banana_green_amount = mean(Float64.(green.(banana)))
 println("Average green for apple = $apple_green_amount")
 println("Average green for banana = $banana_green_amount")
 
-#-
+#%%
 
 σ(x, w, b) = 1 / (1 + exp(-w * x + b))
 
@@ -55,37 +55,36 @@ println("Average green for banana = $banana_green_amount")
 # By changing the parameters of the function, we can change the shape of the function, and hence make it represent, or **fit**, the data better!
 
 
-#-
+#%%
 
 # ## Data fitting by varying parameters
 
 
-#-
+#%%
 
 # We can understand how our choice of `w` and `b` affects our model by seeing how our values for `w` and `b` change the plot of the $\sigma$ function.
 #
-# To do so, we will use the `Interact.jl` Julia package, which provides "widgets" for controlling parameters interactively via sliders:
+# To do so, we will plot a variety of examples:
 
 
-## using Pkg; Pkg.add(["Plots", "Interact"])
-using Plots; gr()   # GR works better for interactive manipulations
-using Interact      # package for interactive manipulation
+## using Pkg; Pkg.add("Plots")
+using Plots
 
 # Run the code in the next cell. You should see two "sliders" appear, one for `w` and one for `b`.
 #
 # **Game**: 
 # Move both of those sliders around until the blue curve, labeled "model", which is the graph of the `\sigma` function, passes through *both* of the data points at the same time.
 
+#%%
 
-@manipulate for w in -10:0.01:30, b in 0:0.1:20
-    
-    plot(x -> σ(x, w, b), xlim=(-0,1), ylim=(-0.1,1.1), label="model", legend=:topleft, lw=3)
-    
-    scatter!([apple_green_amount],  [0.0], label="apple", ms=5)   # marker size = 5
-    scatter!([banana_green_amount], [1.0], label="banana", ms=5)
-    
-end
+w = 10
+b = 10
 
+plot(x -> σ(x, w, b), xlim=(-0,1), ylim=(-0.1,1.1), label="model", legend=:topleft, lw=3)
+scatter!([apple_green_amount],  [0.0], label="apple", ms=5)   # marker size = 5
+scatter!([banana_green_amount], [1.0], label="banana", ms=5)
+
+#%%
 # Notice that the two parameters do two very different things. The **weight**, `w`, determines *how fast* the transition between 0 and 1 occurs. It encodes how trustworthy we think our data  actually is, and in what range we should be putting points between 0 and 1 and thus calling them "unsure". The **bias**, `b`, encodes *where* on the $x$-axis the switch should take place. It can be seen as shifting the function left-right. We'll come to understand these *parameters* more in notebook 6.
 #
 # Here are some parameter choices that work well:
@@ -101,14 +100,14 @@ scatter!([banana_green_amount],[1.0], label="banana")
 # (Note that in this problem there are many combinations of `w` and `b` that fit the data well.)
 
 
-#-
+#%%
 
 # Once we have a model, we have a computational representation for how to choose between "apple" and "banana". So let's pull in some new images and see what our model says about them!
 
 
 apple2 = load("data/107_100.jpg")
 
-#-
+#%%
 
 green_amount = mean(Float64.(green.(apple2)))
 @show green_amount
@@ -118,14 +117,14 @@ scatter!([green_amount], [0.0], label="new apple")
 # Our model successfully says that our new image is an apple! Pat yourself on the back: you've actually just trained your first neural network!
 
 
-#-
+#%%
 
 # #### Exercise 1
 #
 # Load the image of a banana in `data/8_100.jpg` as `mybanana`. Edit the code below to calculate the amount of green in `mybanana` and to overlay data for this image with the existing model and data points.
 
 
-#-
+#%%
 
 # ## Closing remarks: bigger models, more data, more accuracy
 #

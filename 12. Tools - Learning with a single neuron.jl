@@ -30,7 +30,7 @@ draw_network([number_inputs, number_neurons])
 # 5. Use all of the above to train our neuron how to classify images as apples or bananas!
 
 
-#-
+#%%
 
 # #### Note: 
 #
@@ -39,28 +39,28 @@ draw_network([number_inputs, number_neurons])
 # If a single neuron struggles to classify our images, we may need to use a more complicated neural network structure (which corresponds to using a more complicated function).
 
 
-#-
+#%%
 
 # To do this, we need to work with and *clean* some real data. Let's get started!
 
 
-#-
+#%%
 
 # ## Loading in some data
 
 
-#-
+#%%
 
 # Let's load in some real data! We'll use data that we have prepared from photos of apples and bananas; it turns out to be stored on disk in data files as "tab-separated values". We can read this data in with the `CSV.jl` package, as follows.
 
 
 ;head data/Apple_Golden_1.dat
 
-#-
+#%%
 
 ;head data/bananas.dat
 
-#-
+#%%
 
 ## using Pkg; Pkg.add(["CSV", "DataFrames"])
 using CSV, DataFrames
@@ -73,33 +73,33 @@ bananas = DataFrame(CSV.File("data/bananas.dat", delim='\t', allowmissing=:none,
 
 apples
 
-#-
+#%%
 
 typeof(apples)
 
-#-
+#%%
 
 names(apples)
 
 # Each of the two data sets is stored in a `DataFrame` (from the `DataFrames.jl` package).
 
 
-#-
+#%%
 
 # ## Cleaning the data
 
 
-#-
+#%%
 
 # Usually it will be necessary to "clean" the data in some way, i.e. pre-process it, before it can be used for whichever task you are interested in.
 
 
-#-
+#%%
 
 # Our next *meta*-exercise will be to collect all the data from columns 3 and 4 into a *single* Julia vector `x` (of which each entry is itself a vector), and the labels into a single vector `y`. Let's do this in a series of steps!
 
 
-#-
+#%%
 
 # #### Exercise 1
 #
@@ -117,7 +117,7 @@ names(apples)
 # F) Float64, 492
 
 
-#-
+#%%
 
 # #### Exercise 2
 #
@@ -146,7 +146,7 @@ names(apples)
 # Next we want to combine the elements of `x_apples` and `x_bananas` into a single array, `xs`. `xs` should contain, first, all the elements of `x_apples`, and then all the elements of `x_bananas`. Use the `vcat` function to create `xs`.
 
 
-#-
+#%%
 
 # #### Exercise 5
 #
@@ -155,7 +155,7 @@ names(apples)
 # Create an array `ys` where the $i^\mathrm{th}$ element of `ys` is a `0` if the $i^\mathrm{th}$ element of `xs` is an apple, and where the $i^\mathrm{th}$ element of `ys` is a `1` if the $i^\mathrm{th}$ element of `xs` is a banana.
 
 
-#-
+#%%
 
 # #### Exercise 6
 #
@@ -164,24 +164,24 @@ names(apples)
 # Hint: You may want to use the `first` and `last` functions.
 
 
-#-
+#%%
 
 # ## "Learning" by hand
 
 
-#-
+#%%
 
 # Intuitively, looking at the plot of the data, we see that it should be "easy" to find a function that separates the data into bananas on one side and apples on the other: we just need to draw a straight line that divides the two clouds of data. We can do this "by hand", as follows.
 
 
-#-
+#%%
 
 # In the code below, the neuron will learn a function of the form $\sigma(\mathbf{w} \cdot \mathbf{x} + b)$. Since $\sigma$ looks like a smooth version of a step function, we can think of $\sigma$ classifying based on whether the value of its output argument is less than `0.5` or greater than `0.5`. 
 #
-# **Game**: Use the interactive visualization to find suitable values of $\mathbf{w}$ and $b$ such that the hyperplane $\sigma(w_1 x_1 + w_2 x_2 + b) = 0.5$ divides the data. This is the same as the hyperplane for which $w_1 x_1 + w_2 x_2 + b = 0$ ! (Note that there are many such values!)
+# **Game**: Use the visualization to find suitable values of $\mathbf{w}$ and $b$ such that the hyperplane $\sigma(w_1 x_1 + w_2 x_2 + b) = 0.5$ divides the data. This is the same as the hyperplane for which $w_1 x_1 + w_2 x_2 + b = 0$ ! (Note that there are many such values!)
 
 
-#-
+#%%
 
 # We can solve for $x_2$ via 
 #
@@ -189,17 +189,15 @@ names(apples)
 #
 # and use this to draw the corresponding hyperplane.
 
+#%%
+w1 = 3
+w2 = 3
+b = -2.5
 
-## using Pkg; Pkg.add("Interact")
-using Interact
-
-#-
-
-@manipulate for w1 in -2:0.1:6, w2 in -2:0.1:6, b in -5:0.1:0
-    scatter(first.(x_apples), last.(x_apples), m=:cross, label="apples", xlim=(.3, .9), ylim=(.2,.8))
-    scatter!(first.(x_bananas), last.(x_bananas), label="bananas")    
-    plot!(x -> -(w1*x + b) / w2)
-end
+scatter(first.(x_apples), last.(x_apples), m=:cross, label="apples", xlim=(.3, .9), ylim=(.2,.8))
+scatter!(first.(x_bananas), last.(x_bananas), label="bananas")    
+plot!(x -> -(w1*x + b) / w2)
+#%%
 # w1 = 2.22
 # w2 = 1.05
 # b  = -2.0
@@ -207,12 +205,12 @@ end
 # ## How can the neuron *learn* to classify the data?
 
 
-#-
+#%%
 
 # We are now ready for our first experience of **machine learning**: we will let the neuron learn automatically by processing data and tuning model parameters accordingly (the process we call "learning")!
 
 
-#-
+#%%
 
 # For given values of the parameters $w_1$, $w_2$ and $b$, the function $f_{\mathbf{w}, b}$ maps a vector of length $2$ to a number between $0$ and $1$ (due to the definition of $\sigma$). Now we want to have a neuron *learn* suitable values of these parameters. 
 #
@@ -224,7 +222,7 @@ end
 # $$L_i = [f_{\mathbf{w}, b}(\mathbf{x}^{(i)}) - y^{(i)} ]^2.$$
 
 
-#-
+#%%
 
 # However, now we see a key difference from what we did previously: the neuron should vary its parameters in such a way that it manages to minimize this distance for *all* of the input data, simultaneously!
 #
@@ -239,19 +237,19 @@ end
 # Why do we choose this particular loss function? Because the minimum possible value of this loss function is $0$ (since it is a sum of squares), and this is reached only when the neural network perfectly predicts the output. If we can find a way to minimize this loss function, we will get as close as possible to this perfect prediction. (In general, though, we won't be able to get an exact prediction.)
 
 
-#-
+#%%
 
 # ## Minimizing the loss function: *stochastic* gradient descent
 
 
-#-
+#%%
 
 # We already know how to minimise loss functions on a computer: we just calculate the gradient, and do gradient descent! But here we hit a problem: the function $L_\mathrm{total}$ usually has a *lot* of terms, and so calculating the gradient of that function will be very time-consuming.
 #
 # Instead, we will use a variant of gradient descent, called *stochastic* gradient descent. Here, the idea is that we will not use the complete loss function; instead, at each step we will choose a random data point, number $i$, and do a step of gradient descent for the partial loss function $L_i$ *corresponding to only that data point*.
 
 
-#-
+#%%
 
 # **Exercise 7:** 
 #
@@ -269,7 +267,7 @@ end
 # and declare `f(x, w, b)` as in notebook 8.
 
 
-#-
+#%%
 
 # #### Exercise 8
 #
@@ -278,7 +276,7 @@ end
 # $$∇L = \left( \frac{\partial L}{\partial w_1}, \frac{\partial L}{\partial w_2}, \frac{\partial L}{\partial b} \right).$$
 
 
-#-
+#%%
 
 # #### Exercise 9
 #
@@ -295,7 +293,7 @@ end
 # Optional: Keep track of the value of $L_\mathrm{total}$ over time if you want to visualize the learning process.
 
 
-#-
+#%%
 
 # #### Exercise 10
 #
@@ -308,14 +306,14 @@ end
 # B) The output of `f` for the 900th image in `xs` is closer to its label.
 
 
-#-
+#%%
 
 # #### Exercise 11
 #
 # Use the `maximum` function to determine the maximum squared distance of the prediction from the true value. (For each image, this formula is $y_i - f_{w, b}(x_i)$.)
 
 
-#-
+#%%
 
 # #### Exercise 12
 #

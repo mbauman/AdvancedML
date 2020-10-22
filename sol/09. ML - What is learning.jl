@@ -7,7 +7,7 @@
 # Instead, we want our machine to *learn* the parameters that fit the model to our data, without needing us to fiddle with the parameters ourselves. In this notebook, we'll talk about the "learning" in machine learning.
 
 
-#-
+#%%
 
 # ### Motivation: Fitting parameters by hand
 #
@@ -40,7 +40,7 @@ end
 # For a machine, "learning" is that same process, translated into math!
 
 
-#-
+#%%
 
 # ## "Learning by nudging": The process of descent
 #
@@ -60,7 +60,7 @@ end
 ## plotly() # The plotly backend is nice for 3d surface plots
 gr() # The GR backend is good for faster interactive plots
 
-#-
+#%%
 
 L(w, b) = (0 - σ(apple_green_amount,w,b))^2 + (1 - σ(banana_green_amount,w,b))^2
 
@@ -85,7 +85,7 @@ end
 # The blue ball on the 3D plot shows the current parameter choices, plotted as `(w,b)`. Shown below the 3D plot is a 2D plot of the corresponding model with those parameters. Notice that as the blue ball rolls down the hill, the model becomes a better fit. Our loss function gives us a mathematical notion of a "hill", and the process of "learning by nudging" is simply rolling the ball down that hill.
 
 
-#-
+#%%
 
 # To do this mathematically, we need to know which direction is "downhill". Recall from calculus that the derivative of `L` with respect to `b` tells you how `L` changes when `b` changes. Thus to roll downhill, we should go in the direction where the derivative is negative (the function goes down) for each parameter. This direction is the negative of what's called the **gradient**, $\nabla L$. This means that the "learn by nudging method" can be rephrased in mathematical terms as:
 #
@@ -104,7 +104,7 @@ end
 # If we repeat this process, then we will end up at parameters where the model correctly labels apples as `0` and bananas as `1`. When this happens, the model has learned from the data and can then read pictures and tell you whether they are apples or bananas!
 
 
-#-
+#%%
 
 # #### Exercise 1
 #
@@ -129,7 +129,7 @@ end
 # H)<br>
 
 
-#-
+#%%
 
 # #### Solution
 #

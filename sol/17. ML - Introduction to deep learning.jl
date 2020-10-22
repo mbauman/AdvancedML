@@ -13,7 +13,7 @@
 # On the left we have 3 data points in blue. Those 3 data points each get fed into 4 neurons in purple. Each of those 4 neurons produces a single output, but those output are each fed into three neurons (the second layer of purple). Each of those 3 neurons spits out a single value, and those values are fed as inputs into the last layer of 6 neurons. The 6 values that those final neurons produce are the output of the neural network. This is a deep neural network.
 
 
-#-
+#%%
 
 # ### Why would a deep neural network be better?
 #
@@ -43,7 +43,7 @@
 # Because this model is so flexible, the problem is reduced to that of learning: do the same gradient descent method on this much larger model (but more efficiently!) and we can make it classify our data correctly. This is the power of deep learning.
 
 
-#-
+#%%
 
 # #### Solution
 
